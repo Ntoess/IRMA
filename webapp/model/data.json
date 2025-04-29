@@ -1,0 +1,87 @@
+{
+    "backendData": [
+        {
+            "rueckstellungid": "036554646646747",
+            "rueckstellungtext": "Rückstellung für XYCF",
+            "buchungskreis": "1012",
+            "profitcenter": "2345",
+            "segment": "Segment A",
+            "geschaeftsvorfaelle": [
+                {
+                    "name":"fdfdgf",
+                    "geschaeftsvorfaell_id": "1322332",
+                    "gv_art": "2324",
+                    "periode": "Mars",
+                    "rla_gruppe": "HGB",
+                    "belegdatum": "08.08.2024",
+                    "buchungsdatum": "01.01.2024",
+                    "test": "ein Text",
+                    "land": "DE",
+                    "betrag_in_rw": 309040.32,
+                    "kontierungen": [
+                        {
+                            "kostenstelle": "1324345",
+                            "kostenstelle_beschr": "Marketing",
+                            "auftrag": "Auf_3435",
+                            "psp_element": "123243",
+                            "funktionsbereich": "Marketing",
+                            "profitcenter": "123424",
+                            "betrag": 15,
+                            "waehrung": "Eur",
+                            "kundenauftragPos": "343",
+                            "segment": "SegmentA"
+                        },
+                        {
+                            "kostenstelle": "1327770",
+                            "kostenstelle_beschr": "Einkauf",
+                            "auftrag": "Auf_3435",
+                            "psp_element": "123243",
+                            "funktionsbereich": "Marketing",
+                            "profitcenter": "123424",
+                            "betrag": 15,
+                            "waehrung": "Eur",
+                            "kundenauftragPos": "343",
+                            "segment": "SegmentA"
+                        }
+                    ]
+                },
+                {
+                    "geschaeftsvorfaell_id": "1322332",
+                    "gv_art": "2324",
+                    "periode": "Mars",
+                    "rla_gruppe": "HGB",
+                    "belegdatum": "08.08.2024",
+                    "buchungsdatum": "01.01.2024",
+                    "test": "ein Text",
+                    "berag_in_rw": 309040.32,
+                    "kontierungen": [
+                        {
+                            "kostenstelle": "1324345",
+                            "kostenstelle_beschr": "Marketing",
+                            "auftrag": "Auf_3435",
+                            "psp_element": "123243",
+                            "funktionsbereich": "Marketing",
+                            "profitcenter": "123424",
+                            "betrag": 15,
+                            "waehrung": "Eur",
+                            "kundenauftragPos": "343",
+                            "segment": "SegmentA"
+                        },
+                        {
+                            "kostenstelle": "1327770",
+                            "kostenstelle_beschr": "Einkauf",
+                            "auftrag": "Auf_3435",
+                            "psp_element": "123243",
+                            "funktionsbereich": "Marketing",
+                            "profitcenter": "123424",
+                            "betrag": 15,
+                            "waehrung": "Eur",
+                            "kundenauftragPos": "343",
+                            "segment": "SegmentA"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

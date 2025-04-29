@@ -1,0 +1,113 @@
+<core:FragmentDefinition
+   xmlns="sap.m"
+   xmlns:core="sap.ui.core">
+		<VBox class="sapUiSmallMargin">
+		<f:Form id="FormToolbardisplay"
+			editable="true"
+			ariaLabelledBy="Title1" >
+			<f:toolbar>
+				<Toolbar >
+					<Title  text="Geschäftsvorfall"/>
+					<ToolbarSpacer  />
+					<Button icon="sap-icon://settings"/>
+					<Button icon="sap-icon://drop-down-list" />
+				</Toolbar>
+			</f:toolbar>
+			<f:layout >
+				<f:ResponsiveGridLayout
+					labelSpanXL="4"
+					labelSpanL="3"
+					labelSpanM="4"
+					labelSpanS="12"
+					adjustLabelSpan="false"
+					emptySpanXL="0"
+					emptySpanL="4"
+					emptySpanM="0"
+					emptySpanS="0"
+					columnsXL="2"
+					columnsL="1"
+					columnsM="1"
+					singleContainerFullSize="false" />
+			</f:layout>
+			<f:formContainers >
+				<f:FormContainer ariaLabelledBy="Title2">
+					<f:toolbar>
+						<Toolbar>
+							<Title  text="Allgemeine Daten"/>
+							<ToolbarSpacer />			
+							<Text class="sapUiTinyMarginBeginEnd" text="(Mehrfachkontierung ermöglicht ......)" />
+							<Button icon="sap-icon://attachment"/>
+						</Toolbar>
+					</f:toolbar>
+					<f:formElements>
+						<f:FormElement label="Geschäftsvorfallart">
+							<f:fields>
+								<Input value="{oSelGevoModel>gv_art}" id="displayname"/>
+							</f:fields>
+						</f:FormElement>
+                        <f:FormElement label="Belegdatum">
+							<f:fields>
+								<DatePicker value="{oSelGevoModel>belegdatum}" />
+							</f:fields>
+						</f:FormElement>
+                        <f:FormElement label="Buchungsdatum">
+							<f:fields>
+								<DatePicker value="{oSelGevoModel>buchungsdatum}" />
+							</f:fields>
+						</f:FormElement>
+						<f:FormElement label="Buchungsdatum/Periode">
+							<f:fields>
+								<Input value="{oSelGevoModel>buchungsdatum}" />
+								<Input value="{oSelGevoModel>periode}" editable="false">
+									<layoutData>
+										<l:GridData span="XL2 L1 M3 S4" />
+									</layoutData>
+								</Input>
+							</f:fields>
+						</f:FormElement>
+						<f:FormElement label="Text">
+							<f:fields>
+								<Input value="{path : '/name', type : 'sap.ui.model.type.String', constraints : {minLength: 1,maxLength: 10}}">
+									<layoutData>
+										<l:GridData span="XL2 L3 M4 S1" />
+									</layoutData>
+								</Input>
+							</f:fields>
+						</f:FormElement>
+						<f:FormElement label="Betrag in RW">
+							<f:fields>
+								<Input type="Number" value="{path:'oSelGevoModel>betrag_in_rw',type: 'sap.ui.model.type.Integer'}">
+									<layoutData>
+										<l:GridData span="XL2 L1 M3 S4" />
+									</layoutData>
+								</Input>
+								<Input value="{oSelGevoModel>waehrung}" />
+							</f:fields>
+						</f:FormElement>
+						<f:FormElement label="Country">
+							<f:fields>
+								<Select width="100%" id="countryDisplay" selectedKey="{landModel>key}" items="{
+							path: 'landModel>/land/',
+							sorter: { path: 'landModel>key' }
+						}" >
+									<items>
+										<core:Item text="{landModel>beschreibung}" key="{landModel>key}"/>
+									</items>
+								</Select>
+							</f:fields>
+						</f:FormElement>
+                        <f:FormElement label="RLA-Gruppe">
+							<Input value="{oSelGevoModel>rla_gruppe}">
+									<layoutData>
+										<l:GridData span="XL2 L1 M3 S4" />
+									</layoutData>
+								</Input>
+								<Input value="{oSelGevoModel>rlabezeichnung}"/>
+						</f:FormElement>
+					</f:formElements>
+				</f:FormContainer>
+		
+			</f:formContainers>
+		</f:Form>
+</VBox>
+</core:FragmentDefinition>

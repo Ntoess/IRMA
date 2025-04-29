@@ -1,0 +1,236 @@
+<mvc:View controllerName="ikor.project1.controller.View1"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.m" xmlns:l="sap.ui.layout"
+	xmlns:f="sap.ui.layout.form"
+    xmlns:fsimple="sap.f"
+	xmlns:core="sap.ui.core">
+	<SplitApp initialMaster="masterRueckstellung" initialDetail="detailPage2"  id="splitApp">
+	<masterPages>
+		<Page id="masterRueckstellung" backgroundDesign="List" >
+			<Toolbar>
+				<ToolbarSpacer />
+				<Title text="Rückstellungen"/>
+				<ToolbarSpacer />
+				<Button icon="sap-icon://add" press="onNew"/>
+			</Toolbar>
+			<List id="Rueckstellung" itemPress="onRueck" items="{dataModel>/backendData}" backgroundDesign="Solid">
+			<items>
+				<ObjectListItem title="{dataModel>rueckstellungid}" number="{dataModel>buchungskreis}" numberUnit="Eur" numberState="Success" type="Active" >
+					<ObjectAttribute text="Text: {dataModel>rueckstellungtext}"  />
+					<ObjectAttribute text="Segment: {dataModel>segment}" />
+					<ObjectAttribute text="Profitcenter: {dataModel>profitcenter}" />
+				</ObjectListItem>
+			</items>
+			</List>
+		</Page>
+		<Page id="masterGevo" backgroundDesign="List" showNavButton="true" navButtonPress="onPressMasterRueckBack" >
+			<Toolbar>
+				<ToolbarSpacer />
+				<Title text="Geschäftsvorfälle"/>
+				<ToolbarSpacer />
+				<Button icon="sap-icon://add" press="onNew"/>
+			</Toolbar>
+			<List id="gevosTable" itemPress="onGevo" items="{oSelGevoModel>/}" backgroundDesign="Solid">
+			<items>
+				<ObjectListItem title="{oSelGevoModel>geschaeftsvorfaell_id}" number="{oSelGevoModel>betrag_in_rw}" numberUnit="Eur" numberState="Success" type="Active" >
+					<ObjectAttribute text="RLA-Gruppe: {/oSelGevoModel>rla_gruppe}" />
+					<ObjectAttribute text="Periode: {/oSelGevoModel>periode}" />
+					<ObjectAttribute text="Belegatum: {/oSelGevoModel>belegdatum}"  />
+				</ObjectListItem>
+			</items>
+			</List>
+		</Page>
+	</masterPages>
+    <detailPages>
+	<Page id="detailPage2">
+	<Toolbar>
+		<ToolbarSpacer />
+		<Title text="Ikone für Rückstell"/>
+		<ToolbarSpacer/>
+	</Toolbar>
+	</Page>
+	<Page id="newGevo" >
+	<Toolbar>
+		<ToolbarSpacer />
+		<Title text="Neues Geschäftsvorfall anlegen"/>
+		<ToolbarSpacer/>
+	</Toolbar>
+	</Page>
+	<Page id="detailPage1" >
+        <content>
+            <VBox class="sapUiSmallMargin">
+		<f:Form id="FormToolbar"
+			editable="true"
+			ariaLabelledBy="Title1" >
+			<f:toolbar>
+				<Toolbar id="TB1">
+					<!--<Title id="Title1" text="Geschäftsvorfall"/>-->
+					<Title id="Title1" text="Geschäftsvorfall"/>
+					<ToolbarSpacer id="_IDGenToolbarSpacer1" />
+					<Button id="edit" text="Edit" enabled="true" press="onHandleGevoEditPress" icon="sap-icon://edit" />
+					<Button text="löschen" icon="sap-icon://delete"  press="onGevoDelete"/>
+				</Toolbar>
+			</f:toolbar>
+			<f:layout >
+				<f:ResponsiveGridLayout
+					labelSpanXL="4"
+					labelSpanL="3"
+					labelSpanM="4"
+					labelSpanS="12"
+					adjustLabelSpan="false"
+					emptySpanXL="0"
+					emptySpanL="4"
+					emptySpanM="0"
+					emptySpanS="0"
+					columnsXL="2"
+					columnsL="1"
+					columnsM="1"
+					singleContainerFullSize="false" />
+			</f:layout>
+			<f:formContainers >
+				<f:FormContainer ariaLabelledBy="Title2">
+					<f:toolbar>
+						<Toolbar>
+							<Title id="Title2" text="Allgemeine Daten"/>
+							<ToolbarSpacer />			
+							<Text class="sapUiTinyMarginBeginEnd" text="(Mehrfachkontierung ermöglicht ......)" />
+							<Button icon="sap-icon://attachment"/>
+						</Toolbar>
+					</f:toolbar>
+					<f:formElements>
+						<f:FormElement label="Geschäftsvorfallart">
+							<f:fields>
+								<Text text="{oSelGevoModel>gv_art}" id="name"/>
+							</f:fields>
+						</f:FormElement>
+                        <f:FormElement label="Belegdatum">
+							<f:fields>
+								<Text text="{oSelGevoModel>belegdatum}" />
+							</f:fields>
+						</f:FormElement>
+                        <f:FormElement label="Buchungsdatum">
+							<f:fields>
+								<Text text="{oSelGevoModel>buchungsdatum}" />
+							</f:fields>
+						</f:FormElement>
+						<f:FormElement label="Buchungsdatum/Periode">
+							<f:fields>
+								<Text text="{oSelGevoModel>buchungsdatum} / {oSelGevoModel>periode}">
+									<layoutData>
+										<l:GridData span="XL2 L1 M3 S4" />
+									</layoutData>
+								</Text>
+							</f:fields>
+						</f:FormElement>
+						<f:FormElement label="Text">
+							<f:fields>
+								<Text text="{path : 'oSelGevoModel>name', type : 'sap.ui.model.type.String', constraints : {minLength: 1,maxLength: 10}}">
+									<layoutData>
+										<l:GridData span="XL2 L3 M4 S1" />
+									</layoutData>
+								</Text>
+							</f:fields>
+						</f:FormElement>
+						<f:FormElement label="Betrag in RW">
+							<f:fields>
+								<Text  text="{path:'oSelGevoModel>betrag_in_rw',type: 'sap.ui.model.type.Integer'} Eur" >
+									<layoutData>
+										<l:GridData span="XL2 L1 M3 S4" />
+									</layoutData>
+								</Text>
+							</f:fields>
+						</f:FormElement>
+						<f:FormElement label="Country">
+							<Text text="{oSelGevoModel>land}">
+									<layoutData>
+										<l:GridData span="XL2 L1 M3 S4" />
+									</layoutData>
+								</Text>
+						</f:FormElement>
+                        <f:FormElement label="RLA-Gruppe">
+							<Text text="{oSelGevoModel>rla_gruppe} - {oSelGevoModel>rlabezeichnung}">
+									<layoutData>
+										<l:GridData span="XL2 L1 M3 S4" />
+									</layoutData>
+							</Text>
+						</f:FormElement>
+					</f:formElements>
+				</f:FormContainer>
+		
+			</f:formContainers>
+		</f:Form>
+		<Panel headerText="Kontierungen">
+		<HBox alignItems="Center" >
+				<Label width="8rem" class="sapUiSmallMarginBegin" text="Mehrfachkontierung" />
+				<Switch change="onAllowDenseFillChange" state="false" />
+				<Text class="sapUiTinyMarginBeginEnd" text="(Mehrfachkontierung ermöglicht ......)" />
+			</HBox>
+			
+        <Table id="idProductsTable"
+			items="{oSelGevoModel>kontierungen/}">
+			<headerToolbar>
+				<OverflowToolbar>
+					
+					<Title text="Kostenstellen" level="H1" textAlign="Center"/>
+					<ToolbarSpacer/>
+					<Button
+						tooltip="Sort"
+						icon="sap-icon://sort"
+						press="handleSortButtonPressed"/>
+					<Button
+						tooltip="Filter"
+						icon="sap-icon://filter"
+						press="handleFilterButtonPressed"/>
+				</OverflowToolbar>
+			</headerToolbar>
+			<infoToolbar>
+				<OverflowToolbar id="vsdFilterBar" visible="false">
+					<Text id="vsdFilterLabel" />
+				</OverflowToolbar>
+			</infoToolbar>
+			<columns>
+				<Column id="kostenstelle" width="12em" headerMenu="columnHeaderMenu"><Text text="Kostenstelle" /></Column>
+				<Column minScreenWidth="Tablet" demandPopin="true"><Text text="Profit center" /></Column>
+                <Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center"><Text text="Auftrag" /></Column>
+                <Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center"><Text text="segment" /></Column>
+				<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center"><Text text="PSP-Element" /></Column>
+				<Column minScreenWidth="Tablet" demandPopin="true" hAlign="End"><Text text="Funktionsbereich" /></Column>
+				<Column hAlign="End"><Text text="Profitcenter" /></Column>
+			</columns>
+			<items>
+				<ColumnListItem vAlign="Middle">
+					<cells>
+						<ObjectIdentifier title="{oSelGevoModel>kostenstelle}" text="{oSelGevoModel>kostenstelle_beschr}" />
+						<Text text="{oSelGevoModel>profitcenter}" />
+                        <Text text="{oSelGevoModel>auftrag}" />
+                        <Text text="{oSelGevoModel>segment}" />
+                        <Text text="{oSelGevoModel>segment}" />
+						<Text text="{oSelGevoModel>psp_element} für {oSelGevoModel>kundenauftragPos}" />
+						<Text text="{oSelGevoModel>funktionsbereich}" />
+						<ObjectNumber
+								number="{
+									parts:[{path:'oSelGevoModel>betrag'},{path:'oSelGevoModel>waehrung'}],
+									type: 'sap.ui.model.type.Currency',
+									formatOptions: {showMeasure: false}
+								}"
+								unit="{oSelGevoModel>waehrung}" />
+					</cells>
+				</ColumnListItem>
+			</items>
+		</Table>  
+		</Panel>  
+		     
+	</VBox>
+
+        </content>
+    <footer>
+			<OverflowToolbar>
+				<ToolbarSpacer/>
+				<Button type="Accept" text="Simulieren" press="onSimulate"/>
+				<Button type="Reject" text="Schliessen" press="onCloseApp"/>
+			</OverflowToolbar>
+		</footer>
+    </Page>
+	</detailPages>
+	</SplitApp>
+</mvc:View>
