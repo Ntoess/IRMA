@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="1.0"
+xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx"
+xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata"
+xmlns:sap="http://www.sap.com/Protocols/SAPData">
+<edmx:DataServices m:DataServiceVersion="2.0">
+    <Schema Namespace="Z_IRMA_DEMO_SRV" xml:lang="en" sap:schema-version="1"
+    xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+    <EntityType Name="Geschaeftsvorfall" sap:content-version="1">
+        <Key>
+            <PropertyRef Name="GeschaeftsvorfaellId"/>
+        </Key>
+        <Property Name="GeschaeftsvorfaellId" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Gevo" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+        <Property Name="Gevoname" Type="Edm.String" Nullable="false" MaxLength="6" sap:unicode="false" sap:label="Transaction" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+        <Property Name="Gevoart" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Gevo_art" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+        <Property Name="Periode" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Fisc.period" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+        <Property Name="RlaGruppe" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="RLA-Gruppe" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+        <Property Name="Belegdatum" Type="Edm.DateTime" Nullable="false" Precision="7" sap:unicode="false" sap:label="Belegdatum" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+        <Property Name="Buchungsdatum" Type="Edm.DateTime" Nullable="false" Precision="7" sap:unicode="false" sap:label="Date" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+        <Property Name="Land" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Country/Region" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+        <Property Name="BetragInRw" Type="Edm.Decimal" Nullable="false" Precision="28" Scale="9" sap:unicode="false" sap:label="Amount" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+        <Property Name="Waers" Type="Edm.String" Nullable="false" MaxLength="5" sap:unicode="false" sap:label="Currency" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" sap:semantics="currency-code"/>
+        <Property Name="Rueckstellungid" Type="Edm.String" Nullable="false" MaxLength="6" sap:unicode="false" sap:label="Rueckstellung" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+        <NavigationProperty Name="KontierungSet" Relationship="Z_IRMA_DEMO_SRV.gevoToKontierung" FromRole="FromRole_gevoToKontierung" ToRole="ToRole_gevoToKontierung"/>
+    </EntityType>
+    <EntityType Name="Rueckstellung" sap:content-version="1">
+        <Key>
+            <PropertyRef Name="Rueckstellungid"/>
+        </Key>
+        <Property Name="Rueckstellungid" Type="Edm.String" Nullable="false" MaxLength="6" sap:unicode="false" sap:label="Rueckstellung" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+        <Property Name="Beschreibung" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Description" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+        <Property Name="Buchungskreis" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Company Code" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+        <Property Name="Profitcenter" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Profit Center" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+        <Property Name="Segment" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Segment" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+        <NavigationProperty Name="GeschaeftsvorfallSet" Relationship="Z_IRMA_DEMO_SRV.rueckToGevo" FromRole="FromRole_rueckToGevo" ToRole="ToRole_rueckToGevo"/>
+    </EntityType>
+    <EntityType Name="Kontierung" sap:content-version="1">
+        <Key>
+            <PropertyRef Name="Kostenstelle"/>
+        </Key>
+        <Property Name="Kostenstelle" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Cost Center" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+        <Property Name="Beschreibung" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Description" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+        <Property Name="Auftrag" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="AufNr" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+        <Property Name="Psp" Type="Edm.String" Nullable="false" MaxLength="24" sap:unicode="false" sap:label="WBS Element" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+        <Property Name="Funktionsbereich" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="Fktbreich" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+        <Property Name="Profitcenter" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Profitcenter" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+        <Property Name="Betrag" Type="Edm.Decimal" Nullable="false" Precision="14" Scale="3" sap:unicode="false" sap:unit="Waers" sap:label="Currency Amount" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+        <Property Name="Waers" Type="Edm.String" Nullable="false" MaxLength="5" sap:unicode="false" sap:label="Currency" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" sap:semantics="currency-code"/>
+        <Property Name="Gevoid" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Gevo" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+    </EntityType>
+    <Association Name="gevoToKontierung" sap:content-version="1">
+        <End Type="Z_IRMA_DEMO_SRV.Geschaeftsvorfall" Multiplicity="1" Role="FromRole_gevoToKontierung"/>
+        <End Type="Z_IRMA_DEMO_SRV.Kontierung" Multiplicity="*" Role="ToRole_gevoToKontierung"/>
+        <ReferentialConstraint>
+            <Principal Role="FromRole_gevoToKontierung">
+                <PropertyRef Name="GeschaeftsvorfaellId"/>
+            </Principal>
+            <Dependent Role="ToRole_gevoToKontierung">
+                <PropertyRef Name="Gevoid"/>
+            </Dependent>
+        </ReferentialConstraint>
+    </Association>
+    <Association Name="rueckToGevo" sap:content-version="1">
+        <End Type="Z_IRMA_DEMO_SRV.Rueckstellung" Multiplicity="1" Role="FromRole_rueckToGevo"/>
+        <End Type="Z_IRMA_DEMO_SRV.Geschaeftsvorfall" Multiplicity="*" Role="ToRole_rueckToGevo"/>
+        <ReferentialConstraint>
+            <Principal Role="FromRole_rueckToGevo">
+                <PropertyRef Name="Rueckstellungid"/>
+            </Principal>
+            <Dependent Role="ToRole_rueckToGevo">
+                <PropertyRef Name="Rueckstellungid"/>
+            </Dependent>
+        </ReferentialConstraint>
+    </Association>
+    <EntityContainer Name="Z_IRMA_DEMO_SRV_Entities" m:IsDefaultEntityContainer="true" sap:supported-formats="atom json xlsx">
+        <EntitySet Name="GeschaeftsvorfallSet" EntityType="Z_IRMA_DEMO_SRV.Geschaeftsvorfall" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+        <EntitySet Name="RueckstellungSet" EntityType="Z_IRMA_DEMO_SRV.Rueckstellung" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+        <EntitySet Name="KontierungSet" EntityType="Z_IRMA_DEMO_SRV.Kontierung" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1"/>
+        <AssociationSet Name="rueckToGevoSet" Association="Z_IRMA_DEMO_SRV.rueckToGevo" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+            <End EntitySet="RueckstellungSet" Role="FromRole_rueckToGevo"/>
+            <End EntitySet="GeschaeftsvorfallSet" Role="ToRole_rueckToGevo"/>
+        </AssociationSet>
+        <AssociationSet Name="gevoToKontierungSet" Association="Z_IRMA_DEMO_SRV.gevoToKontierung" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+            <End EntitySet="GeschaeftsvorfallSet" Role="FromRole_gevoToKontierung"/>
+            <End EntitySet="KontierungSet" Role="ToRole_gevoToKontierung"/>
+        </AssociationSet>
+    </EntityContainer>
+    <Annotation Term="Core.SchemaVersion" String="1.0.0"
+    xmlns="http://docs.oasis-open.org/odata/ns/edm"/>
+    <atom:link rel="self" href="http://a4hcloudname:50000/sap/opu/odata/sap/Z_IRMA_DEMO_SRV/$metadata"
+    xmlns:atom="http://www.w3.org/2005/Atom"/>
+    <atom:link rel="latest-version" href="http://a4hcloudname:50000/sap/opu/odata/sap/Z_IRMA_DEMO_SRV/$metadata"
+    xmlns:atom="http://www.w3.org/2005/Atom"/>
+</Schema>
+</edmx:DataServices>
+</edmx:Edmx>

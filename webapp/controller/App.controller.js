@@ -7,6 +7,7 @@ sap.ui.define(
   
       return BaseController.extend("ikor.project1.controller.App", {
         onInit: function() {
+       
         }
       });
     }

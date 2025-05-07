@@ -3,16 +3,27 @@ sap.ui.define([
     "ikor/project1/controller/Fragment",
     "sap/ui/model/json/JSONModel",
     "sap/m/MessageBox",
-    "sap/m/MessageToast"
+    "sap/m/MessageToast",
+    "sap/ui/core/Fragment"
 ],
-    function (Controller, Fragment, JSONModel, MessageBox,MessageToast) {
+    function (Controller, FragmentController, JSONModel, MessageBox,MessageToast,Fragment) {
         "use strict";
 
         return Controller.extend("ikor.project1.controller.View1", {
-            oFragment: new Fragment(this),
-
+            oFragment: new FragmentController(this),
+            _formFragments:{},
             onInit: function () {
-                debugger;
+                 debugger;
+          var oModel = this.getOwnerComponent().getModel();
+          oModel.read("/RueckstellungSet", {
+            success: this.fnSuccessCallback.bind(this),
+            error: this.fnErrorCallback.bind(this),
+            }
+        );
+
+        
+
+
                 let oData = {
                     result:[{
                         rueckstellung_id: "fsfdfd",
@@ -29,36 +40,102 @@ sap.ui.define([
 
             },
             onHandleGevoEditPress: function(oEvent){
+                //https://sapui5.hana.ondemand.com/#/entity/sap.ui.layout.form.Form/sample/sap.ui.layout.sample.Form354/code
                 //this._toggleButtonsAndView(true);
-                this.getView().byId("edit").setVisible(false);
+                
+                //this.getView().byId("edit").setVisible(false);
                 //this.getView().byId("anzeigen").setVisible(true);
-                this._showDisplayCreateFragment()
+                let bEdit;
+                if (oEvent.getSource().getText() === "Edit"){
+                    bEdit = true;
+                } else {
+                    bEdit = false;
+                }
+                // Show the appropriate action buttons
+                //this.getView().byId("edit").setVisible(!bEdit);
+                //this.getView().byId("save").setVisible(bEdit);
+                this._getSplitApp().toDetail(this.createId("Gevochange"));
+                 //bind in Change View
+                 let oSelectedKontierungModel = this.getOwnerComponent().getModel("oSelGevoModel");
+                 this.getView().setModel(oSelectedKontierungModel);
+                 //this.getView().byId("Gevochange").setModel(oSelectedGevoModel, "oSelGevoModel");
+                
+
+                //this._showDisplayCreateUpdateFragment(bEdit ? "Gevoedit" : "Gevodisplay");
+                //Clone the data
+			    this._gevoModeldata = Object.assign({}, this.getView().getModel("oSelGevoModel").getData().results);
+            },
+
+            _getFormFragment: function (sFragmentName) {
+                debugger;
+                var pFormFragment = this._formFragments[sFragmentName],
+                    oView = this.getView();
+    
+                if (!pFormFragment) {
+        //debugger;
+                    pFormFragment = Fragment.load({
+                        id: oView.getId(),
+                        name: "ikor.project1.view." + sFragmentName
+                    });
+                    this._formFragments[sFragmentName] = pFormFragment;
+                }
+    
+                return pFormFragment;
             },
            
-            _showDisplayCreateFragment: function(){
+            _showDisplayCreateUpdateFragment: function(bEdit){
+                var oView = this.getView();
+
                 let oGevoPage = this.byId("detailPage1");
+                //let oGevoPage = this.byId("Gevo");
+                
                 oGevoPage.removeAllContent();
-                let oFragment = sap.ui.xmlfragment("ikor.project1.view.Gevonew",this);
-                oGevoPage.insertContent(oFragment)
+                this._getFormFragment(bEdit).then(function(oVBox){
+                    oGevoPage.insertContent(oVBox);
+                });
+                //oGevoPage.removeAllContent();
+                //let oFragment = sap.ui.xmlfragment("ikor.project1.view.Gevonew",this);
+                //oGevoPage.insertContent(oFragment)
                 /*this._getFormFragment(sFragmentName).then(function(oFragment){
                     oGevoPage.insertContent(oFragment);
                 });*/
             },
 
+            fnSuccessCallback: function(oResult, oResponse){
+                // do something
+                let  oModelRueckstellung = new sap.ui.model.json.JSONModel();
+                oModelRueckstellung.setData(oResult.results);
+                this.getView().setModel(oModelRueckstellung, "oModelRueckstell");
+            },
+            fnErrorCallback: function(oError){
+                // output error
+            },
+
             onRueck:function(oEvent){
                 //let nItemNr = oEvent.getParameter("listItem").getBindingContext("dataModel").getProperty("geschaeftsvorfaell_id")
                 let oSelectedGevoModel = new sap.ui.model.json.JSONModel();
-                let oSelectedObject  = oEvent.getParameter("listItem").getBindingContext("dataModel").getObject();
+                let oSelectedObject  = oEvent.getParameter("listItem").getBindingContext("oModelRueckstell").getObject();
+                var oModel = this.getOwnerComponent().getModel();
+                oModel.read("/RueckstellungSet("+"'"+oSelectedObject.Rueckstellungid+"'"+")/GeschaeftsvorfallSet", {
+                    success: function(oData, oResponse){
+                        oSelectedGevoModel.setData(oData);
+                        oSelectedGevoModel.refresh();
+                        this.getView().setModel(oSelectedGevoModel, "oSelGevoModel");
+                       // this.getView().byId("Gevochange").setModel(oSelectedGevoModel, "oSelGevoModel");
+                        this._getSplitApp().toMaster(this.createId("masterGevo"));
+                    }.bind(this),
+                    error: this.fnErrorCallback.bind(this),
+                    }
+                );
+               
                // let sPath = oEvent.getParameter("listItem").getBindingContext("dataModel").getPath();
                 
-                oSelectedGevoModel.setData(oSelectedObject.geschaeftsvorfaelle);
-                oSelectedGevoModel.refresh();
+                
                 //this.getView().
                 //Mehrstufige Objektes berücksichtigen 
                 //sPath = sPath+"/geschaeftsvorfaelle/";
                 //this.byId("masterGevo").setModel(oSelectedGevoModel, "oSelGevoModel");
-                this.getView().setModel(oSelectedGevoModel, "oSelGevoModel");
-                this._getSplitApp().toMaster(this.createId("masterGevo"));
+                
             },
 
             onGevo:function(oEvent){
@@ -68,12 +145,44 @@ sap.ui.define([
                 //let oSelectedGevoModel = this.getView().getModel("oSelectedGevoModel");
                 //oSelectedGevoModel.setData(oSelectedObject);
                 //oSelectedGevoModel.refresh();
+                let oSelectedKontierungModel = new sap.ui.model.json.JSONModel();
+                let oSelectedObject  = oEvent.getParameter("listItem").getBindingContext("oSelGevoModel").getObject();
+                var oModel = this.getOwnerComponent().getModel();
+                oModel.read("/GeschaeftsvorfallSet("+"'"+oSelectedObject.Gevoid+"'"+")/KontierungSet", {
+                    success: function(oData, oResponse){
+                        oSelectedKontierungModel.setData(oData);
+                        oSelectedKontierungModel.refresh();
+                        //bind to the Display View
+                        this.getView().byId("idProductsTable").setModel(oSelectedKontierungModel, "oSelKontierungModel");
+                        this._getSplitApp().toMaster(this.createId("detailPage1"));
+                    }.bind(this),
+                    error: this.fnErrorCallback.bind(this),
+                    }
+                );
+
+
+
+
                 this.byId("detailPage1").bindElement({ path: sPath, model: "oSelGevoModel" });
 
 
                 this._getSplitApp().toDetail(this.createId("detailPage1"));
             },
 
+            onCancelCreateGevo:function(){
+                this._getSplitApp().toDetail(this.createId("detailPage1"));
+            },
+
+            onSaveNewGevo:function(){
+                this._getSplitApp().toDetail(this.createId("detailPage1"));
+            },
+            onCancelChangeGevo:function(){
+                this._getSplitApp().toDetail(this.createId("detailPage1"));
+            },
+            onSaveChangeGevo:function(){
+                //https://community.sap.com/t5/technology-blog-posts-by-members/file-upload-and-download-in-sap-ui5/ba-p/13498211
+                this._getSplitApp().toDetail(this.createId("detailPage1"));
+            },
             onPressMasterRueckBack:function(){
                 this._getSplitApp().backMaster();
                 this._getSplitApp().toDetail(this.createId("detailPage2"));

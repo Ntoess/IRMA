@@ -14,6 +14,17 @@
       "id": "@sap/generator-fiori:basic",
       "version": "1.14.4",
       "toolsId": "9815d479-582c-41db-80a6-c16f7bbb1673"
+    },
+    "dataSources": {
+      "mainService": {
+        "uri": "/sap/opu/odata/sap/Z_IRMA_DEMO_SRV/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "localUri": "localService/mainService/metadata.xml",
+          "odataVersion": "2.0"
+        }
+      }
     }
   },
   "sap.ui": {
@@ -66,6 +77,11 @@
       "landModel": {
         "type": "sap.ui.model.json.JSONModel",
         "uri": "model/country.json"
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {}
       }
     },
     "resources": {

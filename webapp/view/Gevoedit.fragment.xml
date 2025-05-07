@@ -1,16 +1,16 @@
 <core:FragmentDefinition
    xmlns="sap.m"
-   xmlns:core="sap.ui.core">
+   xmlns:core="sap.ui.core" xmlns:f="sap.ui.layout.form" xmlns:l="sap.ui.layout">
 		<VBox class="sapUiSmallMargin">
-		<f:Form id="FormToolbardisplay"
+		<f:Form id="FormToolbaredit"
 			editable="true"
 			ariaLabelledBy="Title1" >
 			<f:toolbar>
 				<Toolbar >
-					<Title  text="Geschäftsvorfall"/>
-					<ToolbarSpacer  />
-					<Button icon="sap-icon://settings"/>
-					<Button icon="sap-icon://drop-down-list" />
+					<Title  text="Geschäftsvorfall ändern"/>
+					<ToolbarSpacer/>
+					<Button id="ExitChangeGevo1" text="Abbrechen" icon="sap-icon://delete"  press="onCancelChangeGevo"/>
+					<Button id="SaveGevoChange1" text="Speichern" icon="sap-icon://save"  press="onSaveChangeGevo"/>
 				</Toolbar>
 			</f:toolbar>
 			<f:layout >
@@ -42,7 +42,7 @@
 					<f:formElements>
 						<f:FormElement label="Geschäftsvorfallart">
 							<f:fields>
-								<Input value="{oSelGevoModel>gv_art}" id="displayname"/>
+								<Input value="{oSelGevoModel>gv_art}" id="gevoname1"/>
 							</f:fields>
 						</f:FormElement>
                         <f:FormElement label="Belegdatum">
@@ -86,7 +86,7 @@
 						</f:FormElement>
 						<f:FormElement label="Country">
 							<f:fields>
-								<Select width="100%" id="countryDisplay" selectedKey="{landModel>key}" items="{
+								<Select width="100%" id="countryDisplay1" selectedKey="{landModel>key}" items="{
 							path: 'landModel>/land/',
 							sorter: { path: 'landModel>key' }
 						}" >
@@ -110,4 +110,5 @@
 			</f:formContainers>
 		</f:Form>
 </VBox>
+
 </core:FragmentDefinition>
