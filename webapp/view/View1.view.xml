@@ -380,7 +380,7 @@
 	<Page id="Gevochange" >
         <content>
             <VBox id="Gevo2" class="sapUiSmallMargin">
-		<f:Form id="FormToolbaredit2"
+		<f:Form id="FormToolbaredit2" 
 			editable="true"
 			ariaLabelledBy="Title1" >
 			<f:toolbar>
@@ -420,23 +420,23 @@
 					<f:formElements>
 						<f:FormElement label="Geschäftsvorfallart">
 							<f:fields>
-								<Input value="{oSelGevoModel>Gevoart}" id="gevoname4"/>
+								<Input value="{oSelGevoModel1>/Gevoart}" id="gevoname4"/>
 							</f:fields>
 						</f:FormElement>
                         <f:FormElement label="Belegdatum">
 							<f:fields>
-								<DatePicker value="{oSelGevoModel>Belegdatum}" />
+								<DatePicker value="{oSelGevoModel1>/Belegdatum}" />
 							</f:fields>
 						</f:FormElement>
                         <f:FormElement label="Buchungsdatum">
 							<f:fields>
-								<DatePicker value="{oSelGevoModel>Buchungsdatum}" />
+								<DatePicker value="{oSelGevoModel1>/Buchungsdatum}" />
 							</f:fields>
 						</f:FormElement>
 						<f:FormElement label="Buchungsdatum/Periode">
 							<f:fields>
-								<Input value="{oSelGevoModel>Buchungsdatum}" />
-								<Input value="{oSelGevoModel>Periode}" editable="false">
+								<Input value="{oSelGevoModel1>/Buchungsdatum}" />
+								<Input value="{oSelGevoModel1>/Periode}" editable="false">
 									<layoutData>
 										<l:GridData span="XL2 L1 M3 S4" />
 									</layoutData>
@@ -454,12 +454,12 @@
 						</f:FormElement>
 						<f:FormElement label="Betrag in RW">
 							<f:fields>
-								<Input type="Number" value="{path:'oSelGevoModel>BetragInRw',type: 'sap.ui.model.type.Integer'}">
+								<Input type="Number" value="{path:'oSelGevoModel1>/BetragInRw',type: 'sap.ui.model.type.Integer'}">
 									<layoutData>
 										<l:GridData span="XL2 L1 M3 S4" />
 									</layoutData>
 								</Input>
-								<Input value="{oSelGevoModel>Waers}" />
+								<Input value="{oSelGevoModel1>/Waers}" />
 							</f:fields>
 						</f:FormElement>
 						<f:FormElement label="Country">
@@ -475,12 +475,12 @@
 							</f:fields>
 						</f:FormElement>
                         <f:FormElement label="RLA-Gruppe">
-							<Input value="{oSelGevoModel>RlaGruppe}">
+							<Input value="{oSelGevoModel1>/RlaGruppe}">
 									<layoutData>
 										<l:GridData span="XL2 L1 M3 S4" />
 									</layoutData>
 								</Input>
-								<Input value="{oSelGevoModel>rlabezeichnung}"/>
+								<Input value="{oSelGevoModel1>/rlabezeichnung}"/>
 						</f:FormElement>
 					</f:formElements>
 				</f:FormContainer>
@@ -495,7 +495,7 @@
 			</HBox>
 			
         <Table id="idProductsTable1"
-			items="{oSelKontierungModel>/results/}">
+			items="{okontierungsModel1>/results/}">
 			<headerToolbar>
 				<OverflowToolbar>
 					
@@ -528,19 +528,19 @@
 			<items>
 				<ColumnListItem vAlign="Middle">
 					<cells>
-						<ObjectIdentifier title="{oSelKontierungModel>Kostenstelle}" text="{oSelGevoModel>kostenstelle_beschr}" />
-						<Text text="{oSelKontierungModel>Profitcenter}" />
-                        <Text text="{oSelKontierungModel>Auftrag}" />
-                        <Text text="{oSelKontierungModel>Segment}" />
-						<Text text="{oSelKontierungModel>Psp} für {oSelKontierungModel>Auftrag}" />
-						<Text text="{oSelKontierungModel>Funktionsbereich}" />
+						<ObjectIdentifier title="{okontierungsModel1>Kostenstelle}" text="{oSelGevoModel>kostenstelle_beschr}" />
+						<Text text="{okontierungsModel1>Profitcenter}" />
+                        <Text text="{okontierungsModel1>Auftrag}" />
+                        <Text text="{okontierungsModel1>Segment}" />
+						<Text text="{okontierungsModel1>Psp} für {okontierungsModel1>Auftrag}" />
+						<Text text="{okontierungsModel1>Funktionsbereich}" />
 						<ObjectNumber
 								number="{
-									parts:[{path:'oSelKontierungModel>Betrag'},{path:'oSelKontierungModel>Waers'}],
+									parts:[{path:'okontierungsModel1>Betrag'},{path:'okontierungsModel1>Waers'}],
 									type: 'sap.ui.model.type.Currency',
 									formatOptions: {showMeasure: false}
 								}"
-								unit="{oSelKontierungModel>Waers}" />
+								unit="{okontierungsModel1>Waers}" />
 					</cells>
 				</ColumnListItem>
 			</items>
