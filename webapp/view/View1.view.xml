@@ -3,8 +3,13 @@
     xmlns="sap.m" xmlns:l="sap.ui.layout"
 	xmlns:f="sap.ui.layout.form"
     xmlns:fsimple="sap.f"
+	xmlns:chart="sap.suite.ui.microchart"
 	xmlns:ui="sap.ui.unified"
-	xmlns:core="sap.ui.core">
+	xmlns:core="sap.ui.core"
+	xmlns:tnt="sap.tnt"
+	xmlns:uxap="sap.uxap"
+	xmlns:upload="sap.m.upload">
+
 	<SplitApp initialMaster="masterRueckstellung" initialDetail="detailPage2"  id="splitApp">
 	<masterPages>
 		<Page id="masterRueckstellung" backgroundDesign="List" >
@@ -14,9 +19,12 @@
 				<ToolbarSpacer />
 				<Button icon="sap-icon://add" press="onNew"/>
 			</Toolbar>
-			<List id="Rueckstellung" itemPress="onRueck" items="{oModelRueckstell>/}" backgroundDesign="Solid">
+			<List id="Rueckstellung" itemPress="onRueck" items="{oModelRueckstell>/}" backgroundDesign="Solid" >
 			<items>
 				<ObjectListItem title="{oModelRueckstell>Rueckstellungid}" number="{oModelRueckstell>Buchungskreis}" numberUnit="Eur" numberState="Success" type="Active" >
+					<firstStatus>
+					<ObjectStatus text="Available" state="Error" />
+					</firstStatus>
 					<ObjectAttribute text="Text: {oModelRueckstell>Beschreibung}"  />
 					<ObjectAttribute text="Segment: {oModelRueckstell>Segment}" />
 					<ObjectAttribute text="Profitcenter: {oModelRueckstell>Profitcenter}" />
@@ -24,15 +32,16 @@
 			</items>
 			</List>
 		</Page>
-		<Page id="masterGevo" backgroundDesign="List" showNavButton="true" navButtonPress="onPressMasterRueckBack" >
+		<Page id="masterGevo" backgroundDesign="List" showNavButton="false" navButtonPress="onPressMasterRueckBack" >
 			<Toolbar>
+				<Button  icon= "sap-icon://sys-back"  type="Neutral" press="onPressMasterRueckBack"/>
 				<ToolbarSpacer />
 				<Title text="Geschäftsvorfälle"/>
 				<ToolbarSpacer />
 				<Button icon="sap-icon://add" press="onNew"/>
 			</Toolbar>
 			<List id="gevosTable" itemPress="onGevo" items="{oSelGevoModel>/results/}" backgroundDesign="Solid">
-			<items>
+			<items>	
 				<ObjectListItem title="{oSelGevoModel>GeschaeftsvorfaellId}" number="{oSelGevoModel>BetragInRw}" numberUnit="Eur" numberState="Success" type="Active" >
 					<ObjectAttribute text="RLA-Gruppe: {oSelGevoModel>RlaGruppe}"/>
 					<ObjectAttribute text="Periode: {oSelGevoModel>/Periode}"/>
@@ -43,16 +52,75 @@
 		</Page>
 	</masterPages>
     <detailPages>
-	<Page id="detailPage2">
+	<Page id="detailPag2">
 	<Toolbar>
 		<ToolbarSpacer />
-		<Title text="Ikone für Rückstell"/>
+		<Title text="Startseite"/>
 		<ToolbarSpacer/>
 	</Toolbar>
+	<l:BlockLayout background="Light">
+				<l:BlockLayoutRow>
+					<l:BlockLayoutCell>
+						<Image width="20%" src="https://www.top-consultant.de/wp-content/uploads/2022/11/2021-ikor-ag-logo-0x977ac40d2945450e88941f24f609474b.jpg"/>
+						<Title level="H1" titleStyle="H1" text="This is UI5!" width="100%" textAlign="Center"/>
+					</l:BlockLayoutCell>
+				</l:BlockLayoutRow>
+				<l:BlockLayoutRow>
+					<l:BlockLayoutCell>
+						<FlexBox items="{/features}" justifyContent="Center" wrap="Wrap" class="sapUiSmallMarginBottom">
+							<tnt:InfoLabel text="{}" class="sapUiSmallMarginTop sapUiSmallMarginEnd"/>
+						</FlexBox>
+					</l:BlockLayoutCell>
+				</l:BlockLayoutRow>
+
+				<l:BlockLayoutRow>
+					<l:BlockLayoutCell>
+						<Panel headerText="Are you ready?" expandable="true">
+							<Switch change=".onChange" customTextOn="yes" customTextOff="no"/>
+							<l:HorizontalLayout id="ready" visible="false" class="sapUiSmallMargin">
+								<Text text="Ok, let's get you started!" class="sapUiTinyMarginEnd"/>
+								<Link text="Learn more" href="https://sdk.openui5.org/"/>
+							</l:HorizontalLayout>
+						</Panel>
+					</l:BlockLayoutCell>
+					<l:BlockLayoutCell>
+						<Panel headerText="Are you ready?" expandable="true">
+							<Switch change=".onChange" customTextOn="yes" customTextOff="no"/>
+							<l:HorizontalLayout id="read2y" visible="false" class="sapUiSmallMargin">
+								<Text text="Ok, let's get you started!" class="sapUiTinyMarginEnd"/>
+								<Link text="Learn more" href="https://sdk.openui5.org/"/>
+							</l:HorizontalLayout>
+						</Panel>
+						
+					</l:BlockLayoutCell>
+				</l:BlockLayoutRow>
+				<l:BlockLayoutRow>
+				<l:BlockLayoutCell>
+						<Panel headerText="Are you ready?" expandable="true">
+							<Switch change=".onChange" customTextOn="yes" customTextOff="no"/>
+							<l:HorizontalLayout id="read9y" visible="false" class="sapUiSmallMargin">
+								<Text text="Ok, let's get you started!" class="sapUiTinyMarginEnd"/>
+								<Link text="Learn more" href="https://sdk.openui5.org/"/>
+							</l:HorizontalLayout>
+						</Panel>
+						
+					</l:BlockLayoutCell>
+					</l:BlockLayoutRow>
+			</l:BlockLayout>
+	<VBox id="cardsContainer" class="sapUiSmallMargin">
+		
+	</VBox>
 	</Page>
 	<Page id="newGevo" >
 	<Toolbar>
-		<ToolbarSpacer />
+		<core:Icon
+			src="sap-icon://create-form"
+			activeBackgroundColor="" >
+			<core:layoutData>
+				<FlexItemData growFactor="1" />
+			</core:layoutData>
+		</core:Icon>
+		<ToolbarSpacer/>
 		<Title text="Neues Geschäftsvorfall anlegen"/>
 		<ToolbarSpacer/>
 	</Toolbar>
@@ -64,24 +132,24 @@
 				<Toolbar >
 					<Title  text="Geschäftsvorfall"/>
 					<ToolbarSpacer/>
-					<Button id="AbbrechenNewGevo" text="Abbrechen" icon="sap-icon://delete"  press="onCancelCreateGevo"/>
-					<Button id="saveNewGevo" text="Speichern" icon="sap-icon://save"  press="onSaveNewGevo"/>
+					<Button id="AbbrechenNewGevo" text="Abbrechen" icon="sap-icon://decline"  press="onCancelCreateGevo" type="Neutral"/>
+					<Button id="saveNewGevo" text="Speichern" icon="sap-icon://save"  press="onSaveNewGevo" type="Neutral"/>
 				</Toolbar>
 			</f:toolbar>
 			<f:layout >
 				<f:ResponsiveGridLayout
 					labelSpanXL="4"
-					labelSpanL="3"
+					labelSpanL="4"
 					labelSpanM="4"
 					labelSpanS="12"
 					adjustLabelSpan="false"
 					emptySpanXL="0"
-					emptySpanL="4"
+					emptySpanL="0"
 					emptySpanM="0"
 					emptySpanS="0"
-					columnsXL="2"
-					columnsL="1"
-					columnsM="1"
+					columnsXL="3"
+					columnsL="2"
+					columnsM="2"
 					singleContainerFullSize="false" />
 			</f:layout>
 			<f:formContainers >
@@ -90,30 +158,41 @@
 						<Toolbar>
 							<Title  text="Allgemeine Daten"/>
 							<ToolbarSpacer />			
-							<Text class="sapUiTinyMarginBeginEnd" text="(Mehrfachkontierung ermöglicht ......)" />
-							<Button icon="sap-icon://attachment"/>
 						</Toolbar>
 					</f:toolbar>
+					
 					<f:formElements>
 						<f:FormElement label="Geschäftsvorfallart">
 							<f:fields>
-								<Input value="{oSelGevoModel>gv_art}" id="gevoname3"/>
+								<Input value="{oNewGevoModel>/Gevoart}" id="gevoname3">
+									<layoutData>
+											<l:GridData span="XL2 L1 M3 S4" />
+									</layoutData>
+								</Input>
 							</f:fields>
 						</f:FormElement>
                         <f:FormElement label="Belegdatum">
 							<f:fields>
-								<DatePicker value="{oSelGevoModel>belegdatum}" />
+								<DatePicker value="{oNewGevoModel>/Belegdatum}" >
+									<layoutData>
+                                        <l:GridData span="XL2 L1 M3 S4" />
+                                    </layoutData>
+								</DatePicker>
 							</f:fields>
 						</f:FormElement>
                         <f:FormElement label="Buchungsdatum">
 							<f:fields>
-								<DatePicker value="{oSelGevoModel>buchungsdatum}" />
+								<DatePicker value="{oNewGevoModel>/Buchungsdatum}" >
+									<layoutData>
+                                        <l:GridData span="XL2 L1 M3 S4" />
+                                    </layoutData>
+								</DatePicker>
 							</f:fields>
 						</f:FormElement>
 						<f:FormElement label="Buchungsdatum/Periode">
 							<f:fields>
-								<Input value="{oSelGevoModel>buchungsdatum}" />
-								<Input value="{oSelGevoModel>periode}" editable="false">
+								<Input value="{oNewGevoModel>/Buchungsdatum}" />
+								<Input value="{oNewGevoModel>/Periode}" editable="false">
 									<layoutData>
 										<l:GridData span="XL2 L1 M3 S4" />
 									</layoutData>
@@ -122,21 +201,21 @@
 						</f:FormElement>
 						<f:FormElement label="Text">
 							<f:fields>
-								<Input value="{path : '/name', type : 'sap.ui.model.type.String', constraints : {minLength: 1,maxLength: 10}}">
-									<layoutData>
-										<l:GridData span="XL2 L3 M4 S1" />
-									</layoutData>
-								</Input>
+								<Input value="{path : '/name', type : 'sap.ui.model.type.String', constraints : {minLength: 1,maxLength: 10}}"/>
 							</f:fields>
 						</f:FormElement>
 						<f:FormElement label="Betrag in RW">
 							<f:fields>
-								<Input type="Number" value="{path:'oSelGevoModel>betrag_in_rw',type: 'sap.ui.model.type.Integer'}">
+								<Input type="Number" value="{path:'oNewGevoModel>/BetragInRw',type: 'sap.ui.model.type.Integer'}">
 									<layoutData>
-										<l:GridData span="XL2 L1 M3 S4" />
+										<l:GridData span="XL2 L2 M2 S1" />
 									</layoutData>
 								</Input>
-								<Input value="{oSelGevoModel>waehrung}" />
+								<Input value="{path: 'oNewGevoModel>/Waers'  , type:'sap.ui.model.type.Currency' }">
+									<layoutData>
+										<l:GridData span="XL1 L1 M1 S1" />
+									</layoutData>
+								</Input>
 							</f:fields>
 						</f:FormElement>
 						<f:FormElement label="Country">
@@ -148,20 +227,23 @@
 									<items>
 										<core:Item text="{landModel>beschreibung}" key="{landModel>key}"/>
 									</items>
+									<layoutData>
+										<l:GridData span="XL2 L3 M4 S1" />
+									</layoutData>
 								</Select>
 							</f:fields>
 						</f:FormElement>
                         <f:FormElement label="RLA-Gruppe">
-							<Input value="{oSelGevoModel>rla_gruppe}">
+							<Input value="{oNewGevoModel>/RlaGruppe}">
 									<layoutData>
 										<l:GridData span="XL2 L1 M3 S4" />
 									</layoutData>
 								</Input>
-								<Input value="{oSelGevoModel>rlabezeichnung}"/>
+								<Input value="{oNewGevoModel>/RlaGruppe}"/>
 						</f:FormElement>
 					</f:formElements>
 				</f:FormContainer>
-				<f:FormContainer title="Upload Documents">
+				<f:FormContainer title="Dokumenten hochladen">
 					<f:formElements>
 						<f:FormElement label="Web page of the contact">
 							<f:fields>
@@ -171,10 +253,15 @@
 						<f:FormElement label="Twitter account of the contact">
 							<f:fields>
 								<ui:FileUploader id="fileUploaderFS2" multiple="false" />
- 								<Button text="Upload" type="Accept" press="onUploadFile"/>
 							</f:fields>
 						</f:FormElement>
 					</f:formElements>
+				
+				</f:FormContainer>
+				<f:FormContainer>
+					<f:FormElement label="Additional Information">
+						<TextArea value="{oSelGevoModel>additional_info}" growing="true" growingMaxLines="7" width="100%"/>
+					</f:FormElement>
 				</f:FormContainer>
 			</f:formContainers>
 		</f:Form>
@@ -182,12 +269,11 @@
 <footer>
 			<OverflowToolbar>
 				<ToolbarSpacer/>
-				<Button type="Accept" text="Simulieren" press="onSimulate"/>
-				<Button type="Reject" text="Schliessen" press="onCloseApp"/>
+				<Button  text="Simulieren" press="onSimulate" type="Emphasized" icon="sap-icon://step"/>
 			</OverflowToolbar>
 		</footer>
 	</Page>
-	<Page id="detailPage1" >
+	<Page id="detailPage3" >
         <content>
             <VBox id="Gevo" class="sapUiSmallMargin">
 		<f:Form id="FormToolbar"
@@ -195,28 +281,29 @@
 			ariaLabelledBy="Title1" >
 			<f:toolbar>
 				<Toolbar id="TB1">
-					<!--<Title id="Title1" text="Geschäftsvorfall"/>-->
-					<Title id="Title1" text="Geschäftsvorfall"/>
+					
+					<ToolbarSpacer id="_IDGenToolbarSpacer6" />
+					<Title id="Title1" text="Geschäftsvorfall anzeigen - {oSelGevoModel>GeschaeftsvorfaellId}"/>
 					<ToolbarSpacer id="_IDGenToolbarSpacer1" />
-					<Button id="edit" text="Edit" enabled="true" press="onHandleGevoEditPress" icon="sap-icon://edit" />
-					<Button id="delete" text="löschen" icon="sap-icon://delete"  press="onGevoDelete"/>
+					<Button id="edit" text="Edit" enabled="true" press="onHandleGevoEditPress" icon="sap-icon://edit" type="Neutral"/>
+					<Button id="delete" text="löschen" icon="sap-icon://delete"  press="onDeleteGevo" type="Neutral"/>
 					
 				</Toolbar>
 			</f:toolbar>
 			<f:layout >
 				<f:ResponsiveGridLayout
 					labelSpanXL="4"
-					labelSpanL="3"
+					labelSpanL="4"
 					labelSpanM="4"
 					labelSpanS="12"
 					adjustLabelSpan="false"
 					emptySpanXL="0"
-					emptySpanL="4"
+					emptySpanL="0"
 					emptySpanM="0"
 					emptySpanS="0"
-					columnsXL="2"
-					columnsL="1"
-					columnsM="1"
+					columnsXL="3"
+					columnsL="2"
+					columnsM="2"
 					singleContainerFullSize="false" />
 			</f:layout>
 			<f:formContainers >
@@ -225,35 +312,51 @@
 						<Toolbar>
 							<Title id="Title2" text="Allgemeine Daten"/>
 							<ToolbarSpacer />			
-							<Text class="sapUiTinyMarginBeginEnd" text="(Mehrfachkontierung ermöglicht ......)" />
-							<Button icon="sap-icon://attachment"/>
 						</Toolbar>
 					</f:toolbar>
 					<f:formElements>
+						<f:FormElement label="Proportion">
+							<f:fields>
+								<ProgressIndicator class="sapUiSmallMarginBottom"
+										percentValue="40"
+										displayValue="40%"
+										showValue="true"
+										displayAnimation= "true"
+										state="Information" height="10px" >
+								</ProgressIndicator>
+							</f:fields>
+						</f:FormElement>
 						<f:FormElement label="Geschäftsvorfallart">
 							<f:fields>
-								<Text text="{oSelGevoModel>Gevoart}" id="name"/>
+								<Text text="{oSelGevoModel>Gevoart}" id="name">
+									<layoutData>
+                                        <l:GridData span="XL2 L1 M3 S4" />
+                                    </layoutData>
+								</Text>
+								<tnt:InfoLabel text="343" renderMode="Loose" colorScheme="7"/>
 							</f:fields>
 						</f:FormElement>
                         <f:FormElement label="Belegdatum">
 							<f:fields>
-								<Text text="{oSelGevoModel>Belegdatum}" />
+								<Text text="{path: 'oSelGevoModel>Belegdatum'  , type:'sap.ui.model.type.Date' }">
+									<layoutData>
+											<l:GridData span="XL2 L1 M3 S4" />
+									</layoutData>
+								</Text>
+								<tnt:InfoLabel text="343" renderMode="Loose" colorScheme="7"/>
 							</f:fields>
 						</f:FormElement>
                         <f:FormElement label="Buchungsdatum">
 							<f:fields>
-								<Text text="{oSelGevoModel>Buchungsdatum}" />
+							<Text text="{path: 'oSelGevoModel>Buchungsdatum'  , type:'sap.ui.model.type.Date' }">
+								<layoutData>
+                                        <l:GridData span="XL2 L1 M3 S4" />
+                                </layoutData>
+							</Text>
+							<tnt:InfoLabel text="343" renderMode="Loose" colorScheme="7"/>
 							</f:fields>
 						</f:FormElement>
-						<f:FormElement label="Buchungsdatum/Periode">
-							<f:fields>
-								<Text text="{oSelGevoModel>Buchungsdatum} / {oSelGevoModel>Periode}">
-									<layoutData>
-										<l:GridData span="XL2 L1 M3 S4" />
-									</layoutData>
-								</Text>
-							</f:fields>
-						</f:FormElement>
+
 						<f:FormElement label="Text">
 							<f:fields>
 								<Text text="{path : 'oSelGevoModel>Gevoname', type : 'sap.ui.model.type.String', constraints : {minLength: 1,maxLength: 10}}">
@@ -261,6 +364,7 @@
 										<l:GridData span="XL2 L3 M4 S1" />
 									</layoutData>
 								</Text>
+								<tnt:InfoLabel text="343" renderMode="Loose" colorScheme="7"/>
 							</f:fields>
 						</f:FormElement>
 						<f:FormElement label="Betrag in RW">
@@ -270,6 +374,7 @@
 										<l:GridData span="XL2 L1 M3 S4" />
 									</layoutData>
 								</Text>
+								<tnt:InfoLabel text="343" renderMode="Loose" colorScheme="7"/>
 							</f:fields>
 						</f:FormElement>
 						<f:FormElement label="Country">
@@ -277,7 +382,8 @@
 									<layoutData>
 										<l:GridData span="XL2 L1 M3 S4" />
 									</layoutData>
-								</Text>
+							</Text>
+							<tnt:InfoLabel text="343" renderMode="Loose" colorScheme="7"/>
 						</f:FormElement>
                         <f:FormElement label="RLA-Gruppe">
 							<Text text="{oSelGevoModel>RlaGruppe} - {oSelGevoModel>rlabezeichnung}">
@@ -285,39 +391,43 @@
 										<l:GridData span="XL2 L1 M3 S4" />
 									</layoutData>
 							</Text>
+							<tnt:InfoLabel text="343" renderMode="Loose" colorScheme="7" visible="false"/>
 						</f:FormElement>
 					</f:formElements>
 				</f:FormContainer>
-					<f:FormContainer title="Upload Documents">
-					<f:formElements>
-						<f:FormElement label="Web page of the contact">
-							<f:fields>
-								<Text text="{Url}" />
-							</f:fields>
-						</f:FormElement>
-						<f:FormElement label="Twitter account of the contact">
-							<f:fields>
-								<ui:FileUploader id="fileUploaderFS" multiple="false" />
- 								<Button text="Upload" type="Accept" press="onUploadFile"/>
-							</f:fields>
-						</f:FormElement>
-					</f:formElements>
+				<f:FormContainer  title="Sonstiges">
+
+					<f:FormElement >
+						<FlexBox width="20rem" height="10rem" alignItems="Start" justifyContent="SpaceBetween">
+							<items>
+								<chart:InteractiveDonutChart id="chart09" selectionChanged="onSelectionChangedChart" segments="{OModelKontierungChart>/}">
+									<chart:segments>
+										<chart:InteractiveDonutChartSegment label="{OModelKontierungChart>label}" value="{OModelKontierungChart>value}" displayedValue="{OModelKontierungChart>DisplayedValue}" color="{OModelKontierungChart>color}"/>
+									</chart:segments>
+		                        </chart:InteractiveDonutChart>						
+							</items>
+						</FlexBox>
+					</f:FormElement>
+								
 				</f:FormContainer>
-		
+
+				<f:FormContainer  title="Workflow" id="card0">
+					<f:FormElement id="integrationCard0" >
+						<FlexBox width="20rem" height="10rem" alignItems="Start" justifyContent="SpaceBetween">
+					
+						</FlexBox>
+					</f:FormElement>
+				</f:FormContainer>
+
 			</f:formContainers>
 		</f:Form>
-		<Panel headerText="Kontierungen">
-		<HBox alignItems="Center" >
-				<Label width="8rem" class="sapUiSmallMarginBegin" text="Mehrfachkontierung" />
-				<Switch change="onAllowDenseFillChange" state="false" />
-				<Text class="sapUiTinyMarginBeginEnd" text="(Mehrfachkontierung ermöglicht ......)" />
-			</HBox>
+		</VBox>
 		
-        <Table id="idProductsTable"
+        <Table id="idProductsTable99"
 			items="{oSelKontierungModel>/results/}">
 			<headerToolbar>
 				<OverflowToolbar>
-					
+					<ToolbarSpacer/>
 					<Title text="Kostenstellen" level="H1" textAlign="Center"/>
 					<ToolbarSpacer/>
 					<Button
@@ -364,31 +474,32 @@
 				</ColumnListItem>
 			</items>
 		</Table>  
-		</Panel>  
+
 		     
-	</VBox>
+
 
         </content>
     <footer>
 			<OverflowToolbar>
 				<ToolbarSpacer/>
-				<Button type="Accept" text="Simulieren" press="onSimulate"/>
-				<Button type="Reject" text="Schliessen" press="onCloseApp"/>
+				<Button type="Emphasized" text="Simulieren" press="onSimulate" icon="sap-icon://step" visible="false"/>
 			</OverflowToolbar>
 		</footer>
     </Page>
 	<Page id="Gevochange" >
         <content>
             <VBox id="Gevo2" class="sapUiSmallMargin">
+			
 		<f:Form id="FormToolbaredit2" 
 			editable="true"
 			ariaLabelledBy="Title1" >
+			
 			<f:toolbar>
 				<Toolbar >
-					<Title  text="Geschäftsvorfall ändern"/>
+					<Title  text="Geschäftsvorfall ändern - {oSelGevoModel1>/GeschaeftsvorfaellId}"/>
 					<ToolbarSpacer/>
-					<Button id="ExitChangeGevo" text="Abbrechen" icon="sap-icon://delete"  press="onCancelChangeGevo"/>
-					<Button id="SaveGevoChange" text="Speichern" icon="sap-icon://save"  press="onSaveChangeGevo"/>
+					<Button id="ExitChangeGevo" text="Abbrechen" icon="sap-icon://decline"  press="onCancelChangeGevo" type="Neutral"/>
+					<Button id="SaveGevoChange" text="Speichern" icon="sap-icon://save"  press="onSaveChangeGevo" type="Neutral"/>
 				</Toolbar>
 			</f:toolbar>
 			<f:layout >
@@ -412,40 +523,48 @@
 					<f:toolbar>
 						<Toolbar>
 							<Title  text="Allgemeine Daten"/>
-							<ToolbarSpacer />			
-							<Text class="sapUiTinyMarginBeginEnd" text="(Mehrfachkontierung ermöglicht ......)" />
-							<Button icon="sap-icon://attachment"/>
+							<ToolbarSpacer />	
+			
 						</Toolbar>
 					</f:toolbar>
+					
 					<f:formElements>
 						<f:FormElement label="Geschäftsvorfallart">
 							<f:fields>
-								<Input value="{oSelGevoModel1>/Gevoart}" id="gevoname4"/>
+								<Input value="{oSelGevoModel1>/Gevoart}" id="gevoname4" maxLength="3">
+									<layoutData>
+                                        <l:GridData span="XL2 L1 M3 S4" />
+                                    </layoutData>
+								</Input>
 							</f:fields>
 						</f:FormElement>
                         <f:FormElement label="Belegdatum">
 							<f:fields>
-								<DatePicker value="{oSelGevoModel1>/Belegdatum}" />
-							</f:fields>
-						</f:FormElement>
-                        <f:FormElement label="Buchungsdatum">
-							<f:fields>
-								<DatePicker value="{oSelGevoModel1>/Buchungsdatum}" />
-							</f:fields>
-						</f:FormElement>
-						<f:FormElement label="Buchungsdatum/Periode">
-							<f:fields>
-								<Input value="{oSelGevoModel1>/Buchungsdatum}" />
-								<Input value="{oSelGevoModel1>/Periode}" editable="false">
+								<DatePicker value="{path: 'oSelGevoModel1>/Belegdatum'  , type:'sap.ui.model.type.Date' }">
 									<layoutData>
-										<l:GridData span="XL2 L1 M3 S4" />
+                                        <l:GridData span="XL2 L1 M3 S4" />
+                                    </layoutData>
+								</DatePicker>
+							</f:fields>
+						</f:FormElement>
+						<f:FormElement label="Buchungsdatum / Periode">
+							<f:fields>
+								<DatePicker value="{path: 'oSelGevoModel1>/Buchungsdatum'  , type:'sap.ui.model.type.Date' }">
+									<layoutData>
+                                        <l:GridData span="XL2 L1 M3 S4" />
+                                    </layoutData>
+								</DatePicker>
+								
+								<Input value="{oSelGevoModel1>/Periode}" editable="false" maxLength="2">
+									<layoutData>
+										<l:GridData span="XL1 L1 M1 S1" />
 									</layoutData>
 								</Input>
 							</f:fields>
 						</f:FormElement>
 						<f:FormElement label="Text">
 							<f:fields>
-								<Input value="{path : '/name', type : 'sap.ui.model.type.String', constraints : {minLength: 1,maxLength: 10}}">
+								<Input value="{path : 'oSelGevoModel1>/Gevoname', type : 'sap.ui.model.type.String', constraints : {minLength: 1,maxLength: 10}}">
 									<layoutData>
 										<l:GridData span="XL2 L3 M4 S1" />
 									</layoutData>
@@ -459,7 +578,11 @@
 										<l:GridData span="XL2 L1 M3 S4" />
 									</layoutData>
 								</Input>
-								<Input value="{oSelGevoModel1>/Waers}" />
+								<Input value="{oSelGevoModel1>/Waers}" editable="false">
+									<layoutData>
+										<l:GridData span="XL1 L1 M1 S1" />
+									</layoutData>
+								</Input>
 							</f:fields>
 						</f:FormElement>
 						<f:FormElement label="Country">
@@ -470,35 +593,36 @@
 						}" >
 									<items>
 										<core:Item text="{landModel>beschreibung}" key="{landModel>key}"/>
+										
 									</items>
+									<layoutData>
+                                        <l:GridData span="XL2 L1 M3 S4" />
+                                    </layoutData>
 								</Select>
 							</f:fields>
 						</f:FormElement>
                         <f:FormElement label="RLA-Gruppe">
-							<Input value="{oSelGevoModel1>/RlaGruppe}">
+								<ComboBox selectedKey="{oSelGevoModel1>/RlaGruppe}" >
 									<layoutData>
 										<l:GridData span="XL2 L1 M3 S4" />
 									</layoutData>
-								</Input>
-								<Input value="{oSelGevoModel1>/rlabezeichnung}"/>
+									<core:Item key="RL2" text ="RLA-Gruppe 2"/>
+									<core:Item key="RL3" text ="RLA-Gruppe 3"/>
+								</ComboBox>
+								<Input value="{oSelGevoModel1>/rlabezeichnung}" maxLength="3" />
 						</f:FormElement>
 					</f:formElements>
 				</f:FormContainer>
 		
 			</f:formContainers>
 		</f:Form>
-		<Panel headerText="Kontierungen">
-		<HBox alignItems="Center" >
-				<Label width="8rem" class="sapUiSmallMarginBegin" text="Mehrfachkontierung" />
-				<Switch change="onAllowDenseFillChange" state="false" />
-				<Text class="sapUiTinyMarginBeginEnd" text="(Mehrfachkontierung ermöglicht ......)" />
-			</HBox>
+
 			
         <Table id="idProductsTable1"
 			items="{okontierungsModel1>/results/}">
 			<headerToolbar>
 				<OverflowToolbar>
-					
+					<ToolbarSpacer/>
 					<Title text="Kostenstellen" level="H1" textAlign="Center"/>
 					<ToolbarSpacer/>
 					<Button
@@ -545,7 +669,6 @@
 				</ColumnListItem>
 			</items>
 		</Table>  
-		</Panel>  
 		     
 	</VBox>
 
@@ -553,11 +676,345 @@
     <footer>
 			<OverflowToolbar>
 				<ToolbarSpacer/>
-				<Button type="Accept" text="Simulieren" press="onSimulate"/>
-				<Button type="Reject" text="Schliessen" press="onCloseApp"/>
+				<Button  text="Simulieren" press="onSimulate" type="Neutral" icon="sap-icon://step"/>
 			</OverflowToolbar>
 		</footer>
     </Page>
+	<uxap:ObjectPageLayout id="detailPage1" upperCaseAnchorBar="false">
+		<uxap:headerTitle>
+			<uxap:ObjectPageDynamicHeaderTitle>
+				<uxap:expandedHeading>
+					<Title text="{oSelGevoModel>Gevoname}"/>
+				</uxap:expandedHeading>
+
+				<uxap:snappedHeading>
+					<HBox>
+						<Avatar src="./test-resources/sap/uxap/images/robot.png"
+							class="sapUiMediumMarginEnd"
+							displayShape="Square" />
+						<VBox>
+							<Title text="{oSelGevoModel>Gevoname}"/>
+							<Label text="{oSelGevoModel>GeschaeftsvorfaellId}" />
+						</VBox>
+					</HBox>
+				</uxap:snappedHeading>
+
+				<uxap:expandedContent>
+					<Label text="{oSelGevoModel>GeschaeftsvorfaellId}" />
+				</uxap:expandedContent>
+
+				<uxap:snappedTitleOnMobile>
+					<Title text="{oSelGevoModel>Gevoname}" />
+				</uxap:snappedTitleOnMobile>
+
+				<uxap:actions>
+					<Button text="Edit" type="Emphasized" press="onHandleGevoEditPress" />
+					<Button text="Delete" press="onDeleteGevo" />
+					<Button text="Neuer Geschäftsvorfall" press="onNew"/>
+				</uxap:actions>
+			</uxap:ObjectPageDynamicHeaderTitle>
+		</uxap:headerTitle>
+
+		<uxap:headerContent>
+			<FlexBox wrap="Wrap" fitContainer="true">
+				<Avatar src="./test-resources/sap/uxap/images/robot.png"
+					class="sapUiMediumMarginEnd"
+					displayShape="Square"
+					displaySize="L" />
+
+				<VBox class="sapUiLargeMarginEnd sapUiSmallMarginBottom">
+					<HBox class="sapUiTinyMarginBottom" renderType="Bare">
+						<Label text="Rückstellung:" class="sapUiTinyMarginEnd" />
+						<Text text="{oModelSelRueck>/Beschreibung}" />
+					</HBox>
+
+					<HBox class="sapUiTinyMarginBottom" renderType="Bare">
+						<Label text="Segment:" class="sapUiTinyMarginEnd" />
+						<Text text="{oModelSelRueck>/Segment}" />
+					</HBox>
+
+					<HBox>
+						<Label text="Rückstellung-ID" class="sapUiTinyMarginEnd" />
+						<Link text="{oModelSelRueck>/Rueckstellungid}" />
+					</HBox>
+				</VBox>
+
+				<VBox class="sapUiLargeMarginEnd sapUiSmallMarginBottom">
+					<Title text="Status" class="sapUiTinyMarginBottom" />
+					<ObjectStatus text="Freigegeben"
+						state="Success"
+						class="sapMObjectStatusLarge" />
+				</VBox>
+
+				<VBox class="sapUiLargeMarginEnd sapUiSmallMarginBottom">
+					<Title text="Restlicher Betrag" class="sapUiTinyMarginBottom" />
+					<ObjectStatus text="- 3000. Eur"
+						icon="sap-icon://batch-payments"
+						class="sapMObjectStatusLarge" />
+				</VBox>
+
+				<VBox class="sapUiLargeMarginEnd sapUiSmallMarginBottom">
+					<Title text="Assembly Option" class="sapUiTinyMarginBottom" />
+					<ObjectStatus text="To Be Selected"
+						state="Error"
+						class="sapMObjectStatusLarge" />
+				</VBox>
+
+				<VBox class="sapUiLargeMarginEnd">
+					<Title text="Ist-Betrag" class="sapUiTinyMarginBottom" />
+					<ObjectNumber number="379.99"
+						unit="{oModelSelRueck>/Waers}" 
+						emphasized="false"
+						class="sapMObjectNumberLarge" />
+				</VBox>
+			</FlexBox>
+		</uxap:headerContent>
+
+		<uxap:sections>
+			<uxap:ObjectPageSection titleUppercase="false" title="General Information">
+				<uxap:subSections>
+					<uxap:ObjectPageSubSection title="Order Details" showTitle="false">
+						<uxap:blocks>
+							
+							<f:SimpleForm class="sapUxAPObjectPageSubSectionAlignContent" 
+								layout="ColumnLayout" columnsM="3" columnsL="3" columnsXL="3">
+								<core:Title text="Allgemeine Informationen" />
+
+								<Label text="Proportion" />
+								<ProgressIndicator class="sapUiSmallMarginBottom"
+										percentValue="40"
+										displayValue="40%"
+										showValue="true"
+										displayAnimation= "true"
+										state="Information" height="10px" >
+								</ProgressIndicator>
+
+								<Label text="Geschäftsvorfallart" />
+								<Text text="{oSelGevoModel>Gevoart}" id="namew">
+									<layoutData>
+                                        <l:GridData span="XL2 L2 M3 S4" />
+                                    </layoutData>
+								</Text>
+								<tnt:InfoLabel text="{oModelSelGevoWfCtxt>/startEvent/gevo_art}" renderMode="Loose" colorScheme="7"  visible="{= ${oModelSelGevoWfCtxt>/startEvent/gevo_art} ===''?false:true}"/>
+
+								<Label text="Country" />
+								<Text text="{oSelGevoModel>Land}">
+									<layoutData>
+										<l:GridData span="XL2 L1 M3 S4" />
+									</layoutData>
+								</Text>
+							
+
+								<Label text="Belegdatum:" />
+								<Text text="{path: 'oSelGevoModel>Belegdatum'  , type:'sap.ui.model.type.Date' }">
+									<layoutData>
+											<l:GridData span="XL2 L1 M3 S4" />
+									</layoutData>
+								</Text>
+								<tnt:InfoLabel text="{oModelSelGevoWfCtxt>/startEvent/belegdatum}" renderMode="Loose" colorScheme="7" visible="{= ${oModelSelGevoWfCtxt>/startEvent/belegdatum} ===''?false:true}"/>
+
+								<Label text="Buchungsdatum" />
+								<Text text="{path: 'oSelGevoModel>Buchungsdatum'  , type:'sap.ui.model.type.Date' }">
+								<layoutData>
+                                        <l:GridData span="XL2 L1 M3 S4" />
+                                </layoutData>
+							</Text>
+							<tnt:InfoLabel text="{oModelSelGevoWfCtxt>/startEvent/buchungsdatum}" renderMode="Loose" colorScheme="7" visible="{= ${oModelSelGevoWfCtxt>/startEvent/buchungsdatum} ===''?false:true}"/>
+
+								<Label text="Kommentar" />
+									<Text text="{path : 'oSelGevoModel>Gevoname', type : 'sap.ui.model.type.String', constraints : {minLength: 1,maxLength: 10}}">
+									<layoutData>
+										<l:GridData span="XL2 L3 M4 S1" />
+									</layoutData>
+								</Text>
+
+								
+
+								<Label text="Betrag in RW" />
+								<Text  text="{path:'oSelGevoModel>BetragInRw',type: 'sap.ui.model.type.Integer'} Eur" >
+									<layoutData>
+										<l:GridData span="XL2 L1 M3 S4" />
+									</layoutData>
+								</Text>
+								<tnt:InfoLabel text="{oModelSelGevoWfCtxt>/startEvent/betrag_in_rw}" renderMode="Loose" colorScheme="7" visible="{= ${oModelSelGevoWfCtxt>/startEvent/betrag_in_rw} ===''?false:true}"/>
+								<Label text="RLA-Gruppe" />
+									<Text text="{oSelGevoModel>RlaGruppe} - {oSelGevoModel>rlabezeichnung}">
+									<layoutData>
+										<l:GridData span="XL2 L1 M3 S4" />
+									</layoutData>
+									</Text>
+								<tnt:InfoLabel text="{oModelSelGevoWfCtxt>/startEvent/rla_gruppe}" renderMode="Loose" colorScheme="7" visible="{= ${oModelSelGevoWfCtxt>/startEvent/rla_gruppe} ===''?false:true}"/>
+							</f:SimpleForm>	
+						</uxap:blocks>
+						<uxap:blocks>
+							<FlexBox id="integrationCard" width="30rem" height="30rem" alignItems="Stretch" justifyContent="SpaceBetween" visible="{= ${oModelSelGevoWfCtxt>/startEvent/buchungsdatum} ===''?false:true}">
+					
+							</FlexBox>	
+						</uxap:blocks>
+						
+					</uxap:ObjectPageSubSection>
+					<uxap:ObjectPageSubSection title="Kontierungen" showTitle="false">
+						<uxap:blocks>
+						
+							<FlexBox  alignItems="Stretch" justifyContent="Center" renderType="Bare">
+							<items>
+								<chart:InteractiveDonutChart id="chart"  selectionChanged="onSelectionChangedChart" segments="{OModelKontierungChart>/}">
+									<chart:segments>
+										<chart:InteractiveDonutChartSegment label="{OModelKontierungChart>label}" value="{OModelKontierungChart>value}" displayedValue="{OModelKontierungChart>DisplayedValue}" color="{OModelKontierungChart>color}"/>
+									</chart:segments>
+		                        </chart:InteractiveDonutChart>		
+								<Table class="sapUxAPObjectPageSubSectionAlignContent"  items="{oSelKontierungModel>/results/}" id="idProductsTable">
+								<headerToolbar>
+									<OverflowToolbar>
+										<Title text="Kontierungen" level="H2" />
+										<ToolbarSpacer />
+										<SearchField width="17.5rem" />
+										<OverflowToolbarButton tooltip="Sort"
+											text="Sort"
+											icon="sap-icon://sort" />
+										<OverflowToolbarButton tooltip="Filter"
+											text="Filter"
+											icon="sap-icon://filter" />
+										<OverflowToolbarButton tooltip="Group"
+											text="Group"
+											icon="sap-icon://group-2" />
+										<OverflowToolbarButton tooltip="Settings"
+											text="Settings"
+											icon="sap-icon://action-settings" />
+									</OverflowToolbar>
+								</headerToolbar>
+
+								<columns>
+									<Column hAlign="Begin">
+										<Text text="Kostenstelle" />
+									</Column>
+									<Column minScreenWidth="Tablet" demandPopin="true">
+										<Text text="Profit Center" />
+									</Column>
+									<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center">
+										<Text text="Auftrag" />
+									</Column>
+									<Column  minScreenWidth="Tablet" demandPopin="true">
+										<Text text="segment" />
+									</Column>
+									<Column  minScreenWidth="Tablet" demandPopin="true" hAlign="End">
+										<Text text="Funktionsbereich" />
+									</Column>
+								</columns>
+
+								<items>
+									<ColumnListItem vAlign="Middle">
+					<cells>
+						<ObjectIdentifier title="{oSelKontierungModel>Kostenstelle}" text="{oSelKontierungModel>Beschreibung}" />
+						<Text text="{oSelKontierungModel>Profitcenter}" />
+                        <Text text="{oSelKontierungModel>Auftrag}" />
+						<Text text="{oSelKontierungModel>PSP} für {oSelKontierungModel>kundenauftragPos}" />
+						<Text text="{oSelKontierungModel>Funktionsbereich}" />
+						<ObjectNumber
+								number="{
+									parts:[{path:'oSelKontierungModel>Betrag'},{path:'oSelKontierungModel>Waers'}],
+									type: 'sap.ui.model.type.Currency',
+									formatOptions: {showMeasure: false}
+								}"
+								unit="{oSelKontierungModel>Waers}" />
+								</cells>
+							</ColumnListItem>
+											</items>
+								</Table>				
+							</items>
+						
+						
+							
+				</FlexBox>
+						</uxap:blocks>
+					</uxap:ObjectPageSubSection>
+				</uxap:subSections>
+			</uxap:ObjectPageSection>
+
+			
+				
+				
+						
+			
+			<uxap:ObjectPageSection titleUppercase="false" title="Workflow">
+				<uxap:subSections>
+					<uxap:ObjectPageSubSection title="Dokumente">
+						<uxap:blocks >
+								<upload:UploadSet
+				id="UploadSet"
+				beforeUploadStarts="onBeforeUploadStarts" 
+				instantUpload="true"
+				showIcons="true"
+				uploadEnabled="true"
+				
+				terminationEnabled="true"
+				fileTypes="txt,doc,png"
+				maxFileNameLength="30"
+				maxFileSize="200"
+				mediaTypes="text/plain,application/msword,image/jpeg,image/png"
+				uploadUrl="/sap/opu/odata/sap/Z_IRMA_DEMO_SRV/MediaSet"
+				items="{path: '/items', templateShareable: false}"
+				mode="MultiSelect"
+				selectionChanged="onSelectionChange">
+			<upload:toolbar>
+				<OverflowToolbar>
+					<ToolbarSpacer/>
+					<Button
+							id="uploadSelectedButton"
+							text="Upload selected"
+							press="onUploadSelectedButton"/>
+					<Button
+							id="downloadSelectedButton"
+							text="Download selected"
+							press="onDownloadSelectedButton"/>
+					<Button
+							id="versionButton"
+							enabled="false"
+							text="Upload a new version"
+							press="onVersionUpload"/>
+					<upload:UploadSetToolbarPlaceholder />
+				</OverflowToolbar>
+			</upload:toolbar>
+			<upload:items>
+				<upload:UploadSetItem
+						removePressed="OnRemovePressed" 
+						openPressed="onOpenPressed"
+						fileName="{Filename}"
+						mediaType="{mediaType}"
+						url="{url}"
+						thumbnailUrl="{thumbnailUrl}"
+						attributes="{path: 'attributes', templateShareable: false}"
+						markers="{path: 'markers', templateShareable: false}"
+						statuses="{path: 'statuses', templateShareable: false}"
+						uploadState="{uploadState}">
+					<upload:attributes>
+						<ObjectAttribute
+								title="{title}"
+								text="{text}"
+								active="{active}"/>
+					</upload:attributes>
+					<upload:markers>
+						<ObjectMarker
+								type="{type}"
+								visibility="{visibility}"/>
+					</upload:markers>
+					<upload:statuses>
+						<ObjectStatus
+								title="{title}"
+								text="{text}"
+								state="{state}"
+								icon="{icon}"
+								active="{active}"/>
+					</upload:statuses>
+				</upload:UploadSetItem>
+			</upload:items>
+		</upload:UploadSet>	
+						</uxap:blocks>
+					</uxap:ObjectPageSubSection>
+				</uxap:subSections>
+			</uxap:ObjectPageSection>
+		</uxap:sections>
+	</uxap:ObjectPageLayout>
 	</detailPages>
 	</SplitApp>
 </mvc:View>

@@ -3,7 +3,7 @@
    xmlns:core="sap.ui.core">
    <Dialog
       id="helloDialog"
-      title="Simulierung {simulationsErgebnis/name}" draggable="true">
+      title="Simulation {simulationsErgebnis/name}" draggable="true" titleAlignment="Center">
 
     <Table id="idProductsTable2"
 			items="{oSelGevoModel>kontierungen/}">
@@ -35,7 +35,7 @@
 				<Column  width="12em" headerMenu="columnHeaderMenu"><Text text="Kostenstelle" /></Column>
 				<Column minScreenWidth="Tablet" demandPopin="true"><Text text="Profit center" /></Column>
                 <Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center"><Text text="Auftrag" /></Column>
-                <Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center"><Text text="segment" /></Column>
+                <Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center"><Text text="Segment" /></Column>
 				<Column minScreenWidth="Tablet" demandPopin="true" hAlign="Center"><Text text="PSP-Element" /></Column>
 				<Column minScreenWidth="Tablet" demandPopin="true" hAlign="End"><Text text="Funktionsbereich" /></Column>
 				<Column hAlign="End"><Text text="Profitcenter" /></Column>
